@@ -1,0 +1,39 @@
+.cell-closed
+{
+	background-color : #0375B4;
+	height : 34px;
+	width : 34px;
+	border: 1px solid #fff;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.cell-marked
+{
+	background-color : #338223;
+	height : 34px;
+	width : 34px;
+	border: 1px solid #fff;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.cell-open
+{
+	background-color : #fff;
+	height : 34px;
+	width : 34px;
+	border: 1px solid #fff;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
