@@ -6,36 +6,65 @@ class Cell extends Component{
 	constructor(props)
 	{
 		super(props);
+		this.state = {isMine : this.props.isBlow, status : 0};
         
         
 	}
 
-	decideColor()
+	handleCellClick(e)
 	{
-		if(this.props.value==0)
+      
+      if(this.state.status== 0)
+      {
+         
+      	this.setState({status : 1});
+      }
+
+
+	}
+
+	handleRight(e)
+	{
+      e.preventDefault();
+      if(this.state.status== 0)
+      {
+
+      	this.setState({status : 2});
+      }
+
+      else if(this.state.status== 2)
+      {
+
+      	this.setState({status : 0});
+      }
+
+	}
+
+	defineColour()
+	{
+		if(!this.state.status)
 		{
-			return (<button className="cell-closed" onClick={() => this.props.onClick()} >
-			</button>);
+			return (<button className="cell-closed" onClick={this.handleCellClick.bind(this)} onContextMenu={this.handleRight.bind(this)}> </button>);
 		}
 
-		else if(this.props.value==2)
+		else if(this.state.status==1)
 		{
-             return (<button className="cell-marked" onClick={() => this.props.onClick()} >
-			</button>);
+			return (<button className="cell-open" onContextMenu={this.handleRight.bind(this)}> </button>);
 		}
 
-		else if(this.props.value==1)
+		else if(this.state.status==2)
 		{
-             return (<button className="cell-open" onClick={() => this.props.onClick()} >
-             	{this.props.mines}
-			</button>);
+			return (<button className="cell-marked"  onContextMenu={this.handleRight.bind(this)}> </button>);
 		}
 	}
+	
 
 	render(){
 		return(
 
-              this.decideColor()
+			 this.defineColour()
+
+              
 			);
 	}
 }
@@ -101,7 +130,7 @@ createRows(rownum)
 	
 	for(let i=0;i<9;i++)
 	{
-		 m.push(<Cell key={rownum*9 + i} value={this.state.cellsUser[rownum][i]} onClick={()=>this.handleClick(rownum,i)} mines={this.state.mineCount[rownum][i]}/>);
+		 m.push(<Cell key={rownum*9 + i} row={rownum} col={i} updateBoard={() => this.handleClick(rownum,i)} isBlow={this.state.cellsGame[rownum][i]}  mines={this.state.mineCount[rownum][i]}/>);
 	}
 
 	return (<div className="board-row" key={rownum}>  {m} </div> );
