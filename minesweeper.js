@@ -14,6 +14,7 @@ class Cell extends Component{
 	{
 		if(this.props.value==0)
 		{
+			
 			return (<button className="cell-closed" onClick={() => this.props.onClick()} >
 			</button>);
 		}
@@ -27,7 +28,7 @@ class Cell extends Component{
 		else if(this.props.value==1)
 		{
              return (<button className="cell-open" onClick={() => this.props.onClick()} >
-             	{this.props.mines}
+             	
 			</button>);
 		}
 	}
@@ -35,7 +36,7 @@ class Cell extends Component{
 	render(){
 		return(
 
-              this.decideColor()
+               this.decideColor()
 			);
 	}
 }
@@ -45,7 +46,7 @@ class MyBoard extends Component{
 constructor()
 {
 	super();
-	this.state = {start : false, cellsUser : Array(9).fill(Array(9).fill(0)), cellsGame : Array(9).fill(Array(9).fill(0)), mineCount : Array(9).fill(Array(9).fill(0)) };
+	this.state = {start : false, cellsUser : Array(3).fill(Array(3).fill(0)), cellsGame : Array(3).fill(Array(3).fill(0)), mineCount : Array(3).fill(Array(3).fill(0)) };
 	
 }
 
@@ -59,11 +60,11 @@ handleClick(i,j){
 		let newcells = populateBoard(i,j);
 		
 
-		let usercells =  Array(9).fill(Array(9).fill(0));
+		let usercells =  Array(3).fill(Array(3).fill(0));
 		usercells[i][j] =1;
 
-
-		this.setState({start : true,  cellsUser : usercells, cellsGame : newcells,});
+        
+		this.setState({start : true,  cellsUser : usercells, cellsGame : newcells});
 		
 	}
 
@@ -83,29 +84,13 @@ handleClick(i,j){
 
 }
 
-createBoard(num)
+renderSquare(i,j)
 {
 	
-	var k =[];
-	for(let j=0;j<num;j++)
-	{
-      k.push(this.createRows(j));
-	}
-
-	return (<div key={num*100}> {k} </div>);
+   return <Cell value={this.state.cellsGame[i][j]} onClick={() => this.handleClick(i,j)} />
 }
 
-createRows(rownum)
-{
-	var m = [];
-	
-	for(let i=0;i<9;i++)
-	{
-		 m.push(<Cell key={rownum*9 + i} value={this.state.cellsUser[rownum][i]} onClick={()=>this.handleClick(rownum,i)} mines={this.state.mineCount[rownum][i]}/>);
-	}
 
-	return (<div className="board-row" key={rownum}>  {m} </div> );
-}
 
 
 
@@ -115,7 +100,23 @@ createRows(rownum)
 		return(
 			
 			
-			this.createBoard(9)
+			<div>
+        <div className="board-row">
+          {this.renderSquare(0,0)}
+          {this.renderSquare(0,1)}
+          {this.renderSquare(0,2)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(1,0)}
+          {this.renderSquare(1,1)}
+          {this.renderSquare(1,2)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(2,0)}
+          {this.renderSquare(2,1)}
+          {this.renderSquare(2,2)}
+        </div>
+      </div>
 
 			
 			);
@@ -136,25 +137,22 @@ class Minesweeper extends Component {
 
 function populateBoard(i,j)
 {
-	var newcells = Array(9).fill(Array(9).fill(0));
-	var k=0;
-	while(k<10)
-	{
-       let a =  Math.floor( Math.random() * ( 1 + 8 - 0) ) + 0;
-       let b =  Math.floor( Math.random() * ( 1 + 8 - 0) ) + 0;
+	var newcells = Array(3).fill(Array(3).fill(0));
 
-       //alert("here");
-         if((newcells[a][b]==0 && a > (i+1) || a < (i-1)) && (b > (j+1) || b < (j-1)))
-         {
-       	   newcells[a][b] = 1;
-       	   
-       	   k++;
-       	 }
+	var k=0;
+	
+       var a =  Math.floor( Math.random() * ( 1 + 2 - 0) ) + 0;
+       var b =  Math.floor( Math.random() * ( 1 + 2 - 0) ) + 0;
+
+       	   newcells[1][1] = 1; //here is the error
+       	   alert(a+" "+b);
+       	 
+       	 
        	
        
 
-	}
-
+	
+    printArray(newcells); //we print the array here, 3 elements are assigned the value of 1, instead of just 1 element
 	return newcells;
 }
 
@@ -164,7 +162,7 @@ function calculateNeighbouringMines(i,j,arr)
 
    for(let k=-1;k<2;k++)
    {
-   	 if(i+k > -1 && i+k < 9)
+   	 if(i+k > -1 && i+k < 3)
    	 {
    	  if(arr[i+k][j] == 1)
    	  {
@@ -175,7 +173,7 @@ function calculateNeighbouringMines(i,j,arr)
 
    for(let m=-1;m<2;m++)
    {
-   	if(i+m > -1 && i+m < 9)
+   	if(i+m > -1 && i+m < 3)
    	 {
    	  if(arr[i][j+m] == 1)
    	  {
@@ -186,6 +184,17 @@ function calculateNeighbouringMines(i,j,arr)
 return count;
 
 
+}
+
+function printArray(arr)
+{
+	for(let i=0;i<3;i++)
+	{
+		for(let j=0;j<3;j++)
+		{
+			alert(i + " " + j + " "+arr[i][j]);
+		}
+	}
 }
 
 export default Minesweeper;
